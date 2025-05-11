@@ -80,6 +80,9 @@ smpp.source_addr=OTPService
 
 ## Тестирование с Postman
 
+### Все запросы есть в коллекции Postman с настроенной автоматической передачей внутри jwt-токенов
+### Путь к коллекции _src/test/resources/postman/OTP Service API.postman_collection.json_
+
 ### 0. Админские операции
 
 #### Обновление конфигурации OTP
