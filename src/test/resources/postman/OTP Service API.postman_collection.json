@@ -1,0 +1,153 @@
+{
+  "info": {
+    "_postman_id": "e0d7d708-7c54-4134-8a68-c9323f1c1c79",
+    "name": "OTP Service API",
+    "description": "Коллекция для тестирования OTP API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json",
+    "_exporter_id": "17868740"
+  },
+  "item": [
+    {
+      "name": "Register",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"login\": \"user1\",\n  \"password\": \"pass123\",\n  \"role\": \"USER\"\n}"
+        },
+        "url": "http://localhost:8080/api/auth/register"
+      },
+      "response": []
+    },
+    {
+      "name": "Login",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "const jsonData = pm.response.json();",
+              "pm.environment.set(\"jwt_token\", jsonData.token);"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"login\": \"user1\",\n  \"password\": \"pass123\"\n}"
+        },
+        "url": "http://localhost:8080/api/auth/login"
+      },
+      "response": []
+    },
+    {
+      "name": "Generate OTP",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{jwt_token}}"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"operationId\": \"test-op-1\",\n  \"channels\": [\n    \"EMAIL\",\n    \"FILE\"\n  ],\n  \"email\": \"test@example.com\"\n}"
+        },
+        "url": "http://localhost:8080/api/otp/send"
+      },
+      "response": []
+    },
+    {
+      "name": "Validate OTP",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{jwt_token}}"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"operationId\": \"test-op-1\",\n  \"code\": \"123456\"\n}"
+        },
+        "url": "http://localhost:8080/api/otp/validate"
+      },
+      "response": []
+    },
+    {
+      "name": "Admin - Update OTP Config",
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{jwt_token}}"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"codeLength\": 6,\n  \"expirationSeconds\": 120\n}"
+        },
+        "url": "http://localhost:8080/api/admin/otp-config"
+      },
+      "response": []
+    },
+    {
+      "name": "Admin - Get All Users (Non-Admins)",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{jwt_token}}"
+          }
+        ],
+        "url": "http://localhost:8080/api/admin/users"
+      },
+      "response": []
+    },
+    {
+      "name": "Admin - Delete User By ID",
+      "request": {
+        "method": "DELETE",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{jwt_token}}"
+          }
+        ],
+        "url": "http://localhost:8080/api/admin/users/2"
+      },
+      "response": []
+    }
+  ]
+}
